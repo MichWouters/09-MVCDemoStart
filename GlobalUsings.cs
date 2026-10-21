@@ -1,0 +1,11 @@
+﻿global using MVCDemo.Models;
+global using MVCDemo.Data.Repository;
+global using MVCDemo.Data.UnitOfWork;
+global using MVCDemo.Data;
+global using System.ComponentModel.DataAnnotations;
+global using Mapster;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.EntityFrameworkCore;
