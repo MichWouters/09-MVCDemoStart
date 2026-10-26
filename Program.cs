@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // MVCDemoContext
-builder.Services.AddDbContext<MVCDemoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDBConnection")));
+builder.Services.AddDbContext<MVCDemoContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
 
 builder.Services.AddIdentity<CustomUser, IdentityRole>()
     .AddEntityFrameworkStores<MVCDemoContext>()

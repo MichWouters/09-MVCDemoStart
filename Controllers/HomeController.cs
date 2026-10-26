@@ -18,8 +18,10 @@ namespace MVCDemo.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [Route("home/privacy/{leeftijd}")]
+        public IActionResult Privacy(int leeftijd)
         {
+            ViewBag.Leeftijd = leeftijd;
             return View();
         }
 

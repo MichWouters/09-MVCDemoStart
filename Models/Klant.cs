@@ -1,6 +1,4 @@
-﻿
-
-namespace MVCDemo.Models
+﻿namespace MVCDemo.Models
 {
     public class Klant
     {

@@ -1,0 +1,41 @@
+﻿@using MVCDemo.ViewModels
+@model KlantListViewModel
+
+@* Plaats een titel op de pagina *@
+@{
+    ViewData["Title"] = "Klanten";
+}
+
+<h2>Klanten</h2>
+
+@if (Model.Klanten.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Klanten.FirstOrDefault().Naam)</th>
+                <th>@Html.DisplayNameFor(x => x.Klanten.FirstOrDefault().Voornaam)</th>
+                <th>@Html.DisplayNameFor(x => x.Klanten.FirstOrDefault().AangemaaktDatum)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var klant in Model.Klanten)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => klant.Naam)</td>
+                    <td>@Html.DisplayFor(x => klant.Voornaam)</td>
+                    <td>@Html.DisplayFor(x => klant.AangemaaktDatum)</td>
+                    <td>
+                        <a class="btn-primary" asp-controller="Klant" asp-action="Details" asp-route-id="@klant.Id">Detail</a>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+else
+{
+    @* Voorzie fallback data *@
+    <p>Geen klanten gevonden</p>
+}
+    
