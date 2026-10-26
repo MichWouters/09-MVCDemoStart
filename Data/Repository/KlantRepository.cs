@@ -26,5 +26,12 @@
         {
             return _context.Klanten.AnyAsync(k => k.Naam == naam && k.Voornaam == voornaam);
         }
+
+        public async Task<IEnumerable<Klant>> SearchKlanten(string zoekWaarde)
+        {
+            return await _context.Klanten
+                .Where(x => x.Naam.Contains(zoekWaarde) || x.Voornaam.Contains(zoekWaarde))
+                .ToListAsync();
+        }
     }
 }

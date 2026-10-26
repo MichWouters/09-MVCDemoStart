@@ -7,5 +7,6 @@
         Task<Klant?> GetKlantMetBestellingen(int id);
 
         Task<bool> KlantBestaat(string naam, string voornaam);
+        Task<IEnumerable<Klant>> SearchKlanten(string zoekWaarde);
     }
 }

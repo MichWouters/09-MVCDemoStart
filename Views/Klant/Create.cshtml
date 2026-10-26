@@ -1,0 +1,58 @@
+﻿@using MVCDemo.ViewModels
+@model KlantCreateViewModel
+
+@{
+    ViewData["Title"] = "Klant aanmaken";
+}
+
+<h1>Nieuwe klant aanmaken</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Klant" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Naam" class="control-label"></label>
+                <input asp-for="Naam" class="form-control" />
+                <span asp-validation-for="Naam" class="text-danger"></span>
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="Voornaam" class="control-label"></label>
+                <input asp-for="Voornaam" class="form-control" />
+                <span asp-validation-for="Voornaam" class="text-danger"></span>
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="AangemaaktDatum"></label>
+                <input asp-for="AangemaaktDatum" class="form-control" />
+                <span asp-validation-for="AangemaaktDatum" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="IsMeerderjarig"></label>
+                <input asp-for="IsMeerderjarig" />
+                <span asp-validation-for="IsMeerderjarig" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Registreren" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Klant" asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

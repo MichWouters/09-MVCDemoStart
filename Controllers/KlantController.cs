@@ -14,10 +14,20 @@ namespace MVCDemo.Controllers
             _uow = uow;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(KlantListViewModel viewModel)
         {
+            IEnumerable<Klant> klanten;
             // Haal data op met Uow en Repositories
-            IEnumerable<Klant> klanten = await _uow.KlantRepository.GetAllAsync();
+
+            if (string.IsNullOrWhiteSpace(viewModel.ZoekWaarde))
+            {
+                klanten = await _uow.KlantRepository.GetAllAsync();
+            }
+            else
+            {
+                // Search string is niet leeg. Zoek naar (een) bepaalde klant(en)
+                klanten = await _uow.KlantRepository.SearchKlanten(viewModel.ZoekWaarde);
+            }
 
             // Map model naar een object dat geschikt is voor de klant
             KlantListViewModel vm = new KlantListViewModel
@@ -42,6 +52,49 @@ namespace MVCDemo.Controllers
 
             // Controller geeft VM aan de view
             return View(vm);
+        }
+
+        // HttpGet -> Haalt formulier op
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(KlantCreateViewModel vm)
+        {
+            // Data annotations validatie
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            // Business specifieke validaties
+            if (await _uow.KlantRepository.KlantBestaat(vm.Naam, vm.Voornaam))
+            {
+                ModelState.AddModelError("", "Klant bestaat al");
+            }
+
+            // Map VM naar Model
+            Klant klant = vm.Adapt<Klant>();
+
+            try
+            {
+                // Query maken
+                await _uow.KlantRepository.AddAsync(klant);
+
+                // Query uitvoeren
+                await _uow.SaveChangesAsync();
+            }
+            catch(DbUpdateException ex)
+            {
+                ModelState.AddModelError("DB", "Er is een fout opgetreden");
+                _logger.LogError(ex.Message);
+            }
+
+            // Stuur de gebruiker terug naar de GET variant
+            return RedirectToAction(nameof(Index));
         }
     }
 }

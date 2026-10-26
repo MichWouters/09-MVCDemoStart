@@ -8,6 +8,18 @@
 
 <h2>Klanten</h2>
 
+<form asp-controller="Klant" asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Zoek op Klant:
+            <input asp-for="ZoekWaarde" /> @* Asp-for gebruiken we om Properties uit de ViewModel te binden *@
+            <input type="submit" value="Zoeken" class="btn btn-primary" />
+            <a asp-controller="Klant" asp-action="Index" class="btn btn-secondary">Terug</a>
+        </p>
+    </div>
+</form>
+
+
 @if (Model.Klanten.Any())
 {
     <table class="table">
