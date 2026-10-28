@@ -1,0 +1,45 @@
+﻿@using MVCDemo.ViewModels
+@model KlantEditViewModel
+
+@{
+    ViewData["Title"] = "Klant bewerken";
+}
+
+<h1>Bewerk klant @Model.Voornaam @Model.Naam</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Klant" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @* In een Update formulier moet een ID voorzien zijn *@
+            <input type="hidden" asp-for="Id" />
+
+            @* Gebruik voor formulieren altijd asp-for *@
+            <div class="form-group">
+                <label asp-for="Naam" class="control-label"></label>
+                <input asp-for="Naam" class="form-control" />
+                <span asp-validation-for="Naam" class="text-danger"></span>
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="Voornaam" class="control-label"></label>
+                <input asp-for="Voornaam" class="form-control" />
+                <span asp-validation-for="Voornaam" class="text-danger"></span>
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="AangemaaktDatum"></label>
+                <input asp-for="AangemaaktDatum" class="form-control" />
+                <span asp-validation-for="AangemaaktDatum" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Bewaren" class="btn btn-primary m-2" />
+            </div>
+        </form>
+    </div>
+</div>

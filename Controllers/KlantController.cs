@@ -1,5 +1,7 @@
 ﻿using MVCDemo.ViewModels;
 using Mapster;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVCDemo.Controllers
 {
@@ -64,12 +66,6 @@ namespace MVCDemo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(KlantCreateViewModel vm)
         {
-            // Data annotations validatie
-            if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
-
             // Business specifieke validaties
             if (await _uow.KlantRepository.KlantBestaat(vm.Naam, vm.Voornaam))
             {
@@ -96,5 +92,71 @@ namespace MVCDemo.Controllers
             // Stuur de gebruiker terug naar de GET variant
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            Klant klant = await _uow.KlantRepository.GetByIdAsync(id);
+
+            if (klant == null)
+            {
+                return NotFound();
+            }
+
+            KlantEditViewModel vm = klant.Adapt<KlantEditViewModel>();
+
+            // Go to app.com/Klant/Edit/X
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, KlantEditViewModel vm)
+        {
+            if (id != vm.Id)
+            {
+                ModelState.AddModelError("Id", "De Id's komen niet overeen");
+                return View(vm);
+            }
+
+            if(!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            Klant bestaandeKlant = await _uow.KlantRepository.GetByIdAsync(id);
+
+            if (bestaandeKlant == null)
+            {
+                ModelState.AddModelError("Klant", $"Klant {id} bestaat niet!");
+                return View(vm);
+            }
+
+            vm.Adapt<Klant>();
+
+            try
+            {
+                _uow.KlantRepository.Update(bestaandeKlant);
+                await _uow.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException e)
+            {
+                _logger.LogError(e.Message);
+
+                if (!await _uow.KlantRepository.ExistsAsync(id))
+                {
+                    ModelState.AddModelError("Klant", "Er is een probleem opgetreden bij het wegschrijven naar de database.");
+                    return View(vm);
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e.Message);
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        
     }
 }

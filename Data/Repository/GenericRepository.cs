@@ -28,7 +28,7 @@ namespace MVCDemo.Data.Repository
 
         public void Update(TEntity entity)
         {
-            _context.Set<TEntity>().Update(entity);
+            _context.Set<TEntity>().Attach(entity);
         }
 
         public void Delete(TEntity entity)
